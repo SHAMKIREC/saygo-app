@@ -104,7 +104,7 @@
   function doListen(){
     var l=lessons[state.current],box=$('#voiceState'),synth=window.speechSynthesis;
     if(!synth){box.className='state bad';box.textContent='На этом устройстве недоступен синтез речи. В Android: Настройки → Спец. возможности → Синтез речи → скачай English (United States).';return}
-    function speak(){var voices=synth.getVoices(),u=new SpeechSynthesisUtterance(l.english);u.lang='en-US';u.rate=.78;u.pitch=1;u.voice=voices.find(function(v){return /Google US English|Microsoft.*English|Samantha/i.test(v.name)})||voices.find(function(v){return v.lang==='en-US'})||voices.find(function(v){return v.lang.indexOf('en')===0})||null;synth.cancel();synth.speak(u);box.className='state good';box.textContent='Голос включён. Послушай 2–3 раза, затем повтори короткими частями.'}
+    function speak(){var voices=synth.getVoices(),u=new SpeechSynthesisUtterance(l.english);state.listened=true;u.lang='en-US';u.rate=.78;u.pitch=1;u.voice=voices.find(function(v){return /Google US English|Microsoft.*English|Samantha/i.test(v.name)})||voices.find(function(v){return v.lang==='en-US'})||voices.find(function(v){return v.lang.indexOf('en')===0})||null;synth.cancel();synth.speak(u);box.className='state good';box.textContent='Голос включён. Послушай 2–3 раза, затем повтори короткими частями.'}
     if(synth.getVoices().length)speak();else{box.textContent='Загружаю голос телефона…';synth.onvoiceschanged=speak;setTimeout(speak,700)}
   }
   function doSpeech(){
@@ -117,18 +117,21 @@
   }
   document.addEventListener('click',function(e){
     var navBtn=e.target.closest('[data-nav]');if(navBtn){state.tab=navBtn.dataset.nav;render();window.scrollTo(0,0);return}
-    var open=e.target.closest('[data-open]');if(open){state.current=Number(open.dataset.open);state.tab='today';state.quiz=false;state.built=false;state.words=[];state.spoken=false;render();window.scrollTo(0,0);return}
+    var open=e.target.closest('[data-open]');if(open){state.current=Number(open.dataset.open);state.tab='today';state.quiz=false;state.built=false;state.words=[];state.soundAnswers={};state.spoken=false;state.listened=false;state.speechReport='';render();window.scrollTo(0,0);return}
+    var sound=e.target.closest('[data-sound]');if(sound){var parts=sound.dataset.sound.split('|'),itemIndex=Number(parts[0]),optionIndex=Number(parts[1]);state.soundAnswers[itemIndex]=optionIndex;state.built=false;renderToday();return}
     var word=e.target.closest('[data-word]');if(word){var all=(lessons[state.current].build||[]).slice().reverse(),w=all[Number(word.dataset.word)];state.words.push(w);render();return}
     var q=e.target.closest('[data-quiz]');if(q){var l=lessons[state.current],choice=Number(q.dataset.quiz),box=$('#quizState');document.querySelectorAll('[data-quiz]').forEach(function(b){b.classList.remove('correct','wrong')});if(choice===l.quiz.answer){q.classList.add('correct');state.quiz=true;box.className='state good';box.textContent='Верно. '+l.quiz.explain}else{q.classList.add('wrong');state.quiz=false;box.className='state bad';box.textContent='Пока не так. Верный ответ: '+l.quiz.options[l.quiz.answer]+'. '+l.quiz.explain}return}
     var action=e.target.closest('[data-action]');if(!action)return;
     if(action.dataset.action==='listen')doListen();
     if(action.dataset.action==='clear-build'){state.words=[];state.built=false;renderToday()}
+    if(action.dataset.action==='clear-sound'){state.soundAnswers={};state.built=false;renderToday()}
     if(action.dataset.action==='check-build'){var target=(lessons[state.current].build||[]).join(' ').toLowerCase(),actual=state.words.join(' ').toLowerCase(),box=$('#buildState');state.built=target===actual;box.className=state.built?'state good':'state bad';box.textContent=state.built?'Верно. Теперь закрепи правило мини‑тестом.':'Порядок пока неверный. Нажми «Очистить» и попробуй снова.';if(state.built)renderToday()}
+    if(action.dataset.action==='check-sound'){var items=lessons[state.current].soundItems||[],ok=items.length>0&&items.every(function(item,i){return state.soundAnswers[i]===item.answer}),soundBox=$('#buildState');state.built=ok;soundBox.className=ok?'state good':'state bad';soundBox.textContent=ok?'Верно. Теперь закрепи правило мини-тестом.':'Пока не всё верно. Прочитай подсказку и попробуй снова.';if(ok)renderToday()}
     if(action.dataset.action==='speech')doSpeech();
     if(action.dataset.action==='complete'){if(!state.built||!state.quiz){toast('Сначала собери фразу и ответь на мини‑тест.');return}state.done.add(state.current);save();toast('Урок '+(state.current+1)+' сохранён. Хорошая работа.');renderToday()}
-    if(action.dataset.action==='next'){if(state.current<lessons.length-1){state.current++;state.quiz=false;state.built=false;state.words=[];state.spoken=false;renderToday();window.scrollTo(0,0)}}
-    if(action.dataset.action==='prev'){if(state.current>0){state.current--;state.quiz=false;state.built=false;state.words=[];state.spoken=false;renderToday();window.scrollTo(0,0)}}
-    if(action.dataset.action==='go-next'){state.current=nextIndex();state.tab='today';state.quiz=false;state.built=false;state.words=[];render();window.scrollTo(0,0)}
+    if(action.dataset.action==='next'){if(state.current<lessons.length-1){state.current++;state.quiz=false;state.built=false;state.words=[];state.soundAnswers={};state.spoken=false;state.listened=false;state.speechReport='';renderToday();window.scrollTo(0,0)}}
+    if(action.dataset.action==='prev'){if(state.current>0){state.current--;state.quiz=false;state.built=false;state.words=[];state.soundAnswers={};state.spoken=false;state.listened=false;state.speechReport='';renderToday();window.scrollTo(0,0)}}
+    if(action.dataset.action==='go-next'){state.current=nextIndex();state.tab='today';state.quiz=false;state.built=false;state.words=[];state.soundAnswers={};state.spoken=false;state.listened=false;state.speechReport='';render();window.scrollTo(0,0)}
   });
   if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(list){list.forEach(function(reg){reg.unregister()})})}
   state.current=nextIndex();render()
