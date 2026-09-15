@@ -96,7 +96,7 @@
     if(synth.getVoices().length)speak();else{box.textContent='Загружаю голос телефона…';synth.onvoiceschanged=speak;setTimeout(speak,700)}
   }
   function doSpeech(){
-    var Recognition=window.SpeechRecognition||window.webkitSpeechRecognition,box=$('#speechState'),l=lessons[state.current);
+    var Recognition=window.SpeechRecognition||window.webkitSpeechRecognition,box=$('#speechState'),l=lessons[state.current];
     if(!Recognition){box.className='state bad';box.textContent='Chrome на этом телефоне не дал распознавание речи. Урок можно закончить через практику и тест, а речь повтори позже.';return}
     var rec=new Recognition();rec.lang='en-US';rec.interimResults=false;rec.maxAlternatives=1;box.className='state';box.textContent='Слушаю. Произнеси: '+l.english;
     rec.onresult=function(e){var heard=e.results[0][0].transcript,need=clean(l.english).split(' '),got=clean(heard).split(' '),matched=need.filter(function(w){return got.indexOf(w)!==-1}),missing=need.filter(function(w){return got.indexOf(w)===-1}),score=Math.round(matched.length/need.length*100);state.spoken=true;box.className=score>=70?'state good':'state bad';box.innerHTML='<b>Телефон услышал:</b> '+esc(heard)+'<br><b>Совпало:</b> '+esc(matched.join(', ')||'пока нет')+'<br><b>Повтори:</b> '+esc(missing.join(', ')||'всё хорошо')+'<br><b>Результат:</b> '+score+'%';renderToday()};
