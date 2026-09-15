@@ -79,13 +79,13 @@
     app.innerHTML=html;nav()
   }
   function renderCourse(){
-    var html=header()+'<section class="course-head"><div class="eyebrow"><i class="dot"></i>ТВОЙ ПЛАН ОБУЧЕНИЯ</div><h1>Курс<br>по шагам.</h1><p class="intro">Не нужно выбирать наугад. Проходи по порядку: сначала звуки, затем первые разговорные ситуации.</p></section>';
-    var module='';
+    var html=header()+'<section class="course-head"><div class="eyebrow"><i class="dot"></i>ТВОЙ ПЛАН ОБУЧЕНИЯ</div><h1>Курс<br>по шагам.</h1><p class="intro">Сначала буквы, затем звуки, потом первые фразы. Каждый следующий шаг опирается на предыдущий.</p></section>';
+    var module='',notes={'МОДУЛЬ 1 · БУКВЫ И ЗВУКИ':'Учим буквы отдельно от звуков и не читаем английский русскими буквами.','МОДУЛЬ 2 · ПЕРВЫЕ ФРАЗЫ':'Строим короткие жизненные фразы: знакомство, помощь, дорога и кафе.','МОДУЛЬ 3 · ПЕРВАЯ ПРОВЕРКА':'Проверяем, что основа действительно понятна, а не просто пройдена.'};
     lessons.forEach(function(l,i){
-      if(l.module!==module){module=l.module;html+='<div class="module"><b>'+esc(module)+'</b><span>'+(module.indexOf('СТАРТ')===0?'Учим базу, чтобы не читать английский русскими буквами.':'Применяем основу в реальных коротких фразах.')+'</span></div>'}
-      html+='<button class="lesson-row" data-open="'+i+'"><span class="number">'+(state.done.has(i)?'✓':i+1)+'</span><span class="lesson-copy"><strong>'+esc(l.title)+'</strong><span class="tag">'+esc(l.tag)+'</span><span class="preview">'+esc(l.english)+'</span></span><span class="chip">'+(state.done.has(i)?'ГОТОВО':'ОТКРЫТЬ')+'</span></button>'
+      if(l.module!==module){module=l.module;html+='<div class="module"><b>'+esc(module)+'</b><span>'+esc(notes[module]||'Последовательный учебный модуль.')+'</span></div>'}
+      html+='<button class="lesson-row" data-open="'+i+'"><span class="number">'+(state.done.has(i)?'✓':i+1)+'</span><span class="lesson-copy"><strong>'+esc(l.title)+'</strong><span class="tag">ТЕМА: '+esc(l.tag)+'</span><span class="preview">АНГЛИЙСКИЙ: '+esc(l.english)+'</span></span><span class="chip">'+(state.done.has(i)?'ГОТОВО':'ОТКРЫТЬ')+'</span></button>'
     });
-    html+='<section class="module"><b>ДАЛЬШЕ · УРОКИ 13–60</b><span>Люди, город, поездка, покупки, работа, диалоги и финальное закрепление. Откроем после того, как бесплатный старт станет настоящим курсом, а не витриной.</span></section>';
+    html+='<section class="module"><b>ДАЛЬШЕ · УРОКИ 13–24</b><span>Основа грамматики: I / you / we, am / are / is, порядок слов, вопросы, отрицания, a / an.</span></section><section class="module"><b>ДАЛЬШЕ · УРОКИ 25–60</b><span>Реальные ситуации, диалоги, повторение и итоговый экзамен. Не продаём их как готовые, пока не соберём честно.</span></section>';
     app.innerHTML=html;nav()
   }
   function renderProgress(){
