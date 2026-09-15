@@ -25,7 +25,30 @@
 (function(){
   var lessons=window.SAYGO_LESSONS||[];
   var saved=JSON.parse(localStorage.getItem('saygo-v2-done')||'[]');
-  var state={tab:'today',current:0,done:new Set(saved),quiz:false,built:false,words:[],soundAnswers:{},spoken:false,listened:false,speechReport:''};
+  var examSaved=JSON.parse(localStorage.getItem('saygo-v2-exam')||'null');
+  var examQuestions=[
+    {lesson:0,area:'Алфавит',q:'Как называется буква E?',o:['и','эй','э'],a:0,x:'E называется «и».'},
+    {lesson:1,area:'Алфавит',q:'Как называется буква J?',o:['джей','джи','йот'],a:0,x:'J называется «джей».'},
+    {lesson:2,area:'Алфавит',q:'Как называется буква W?',o:['дабл-ю','ви','дубль-вэ'],a:0,x:'W называется «дабл-ю».'},
+    {lesson:3,area:'Звуки',q:'Как ближе всего звучит cat?',o:['кэт','кат','кит'],a:0,x:'В cat буква a даёт звук /æ/, он ближе к «э».'},
+    {lesson:3,area:'Звуки',q:'Какой звук главный в слове sit?',o:['i — /ɪ/','e — /e/','a — /æ/'],a:0,x:'В sit короткий звук i — /ɪ/.'},
+    {lesson:3,area:'Звуки',q:'Что означает слово bed?',o:['кровать','кошка','чашка'],a:0,x:'bed — кровать.'},
+    {lesson:4,area:'Произношение',q:'Как сделать TH в think?',o:['язык чуть между зубами и воздух вперёд','как русское «с»','как русское «в»'],a:0,x:'Для TH кончик языка чуть между зубами, воздух идёт вперёд.'},
+    {lesson:4,area:'Произношение',q:'Чем нельзя заменять TH в think?',o:['русским «с»','воздухом вперёд','тренировкой перед зеркалом'],a:0,x:'TH — не русское «с», «з» и не «в».'},
+    {lesson:5,area:'Произношение',q:'Как начинается W в слове we?',o:['губы трубочкой, без «в»','как русское «в»','как «ф»'],a:0,x:'W начинается округлёнными губами, без русского «в».'},
+    {lesson:5,area:'Фраза',q:'Как по-английски «Мы хотим воды»?',o:['We want water.','We are water.','I want we.'],a:0,x:'We want water. — «Мы хотим воды».'},
+    {lesson:6,area:'Знакомство',q:'Что означает I’m?',o:['я','ты','привет'],a:0,x:'I’m = I am. В знакомстве это «я».'},
+    {lesson:6,area:'Знакомство',q:'Выбери правильное знакомство.',o:['Hello, I’m Rustam.','Hello, you Rustam.','I’m hello Rustam.'],a:0,x:'Сначала Hello, затем I’m и имя.'},
+    {lesson:7,area:'Разговор',q:'Как начинается вопрос «Как дела?»?',o:['How are you?','You how are?','Are how you?'],a:0,x:'В готовом вопросе: How are you?'},
+    {lesson:7,area:'Разговор',q:'Как ответить «Хорошо, спасибо»?',o:['I’m fine, thanks.','I’m help.','Where fine?'],a:0,x:'I’m fine, thanks. — «Хорошо, спасибо».'},
+    {lesson:8,area:'Просьба',q:'Что означает need?',o:['нуждаться','идти','помнить'],a:0,x:'need означает «нуждаться».'},
+    {lesson:8,area:'Просьба',q:'Как попросить помощь?',o:['I need some help.','I help need.','Need I some.'],a:0,x:'В начале английской фразы обычно стоит тот, кому нужна помощь: I.'},
+    {lesson:9,area:'Дорога',q:'Какое слово означает «где»?',o:['Where','What','When'],a:0,x:'Where означает «где».'},
+    {lesson:9,area:'Дорога',q:'Как спросить «Где станция?»',o:['Where is the station?','Where the station is?','Station where?'],a:0,x:'Сначала Where, затем is, затем место.'},
+    {lesson:10,area:'Кафе',q:'Какая просьба звучит вежливее?',o:['I would like water.','I want water.','Water me.'],a:0,x:'I would like… — мягкое и вежливое «я бы хотел».'},
+    {lesson:11,area:'Итог',q:'Что было сначала в курсе?',o:['буквы и звуки','сложные времена','длинные диалоги'],a:0,x:'Сначала фундамент: буквы, звуки и чтение. Потом фразы.'}
+  ];
+  var state={tab:'today',current:0,done:new Set(saved),quiz:false,built:false,words:[],soundAnswers:{},spoken:false,listened:false,speechReport:'',examStep:0,examAnswers:[],examResult:examSaved};
   var app=document.getElementById('app');
   var toastTimer;
   function $(s){return document.querySelector(s)}
@@ -88,18 +111,38 @@
     html+='<section class="module"><b>ДАЛЬШЕ · УРОКИ 13–24</b><span>Основа грамматики: I / you / we, am / are / is, порядок слов, вопросы, отрицания, a / an.</span></section><section class="module"><b>ДАЛЬШЕ · УРОКИ 25–60</b><span>Реальные ситуации, диалоги, повторение и итоговый экзамен. Не продаём их как готовые, пока не соберём честно.</span></section>';
     app.innerHTML=html;nav()
   }
+  function examScore(){return state.examAnswers.reduce(function(sum,answer,index){return sum+(answer===examQuestions[index].a?1:0)},0)}
+  function finishExam(){
+    var score=examScore(),weak=[];
+    examQuestions.forEach(function(question,index){if(state.examAnswers[index]!==question.a&&weak.indexOf(question.lesson)===-1)weak.push(question.lesson)});
+    state.examResult={score:score,total:examQuestions.length,weak:weak,date:day()};
+    localStorage.setItem('saygo-v2-exam',JSON.stringify(state.examResult));
+  }
+  function renderExam(){
+    var result=state.examResult,html=header();
+    if(result){
+      var passed=result.score>=16,weakText=result.weak.length?'Нужно повторить: '+result.weak.map(function(i){return 'урок '+(i+1)}).join(', ')+'.':'Ошибок по темам нет.';
+      html+='<section class="course-head"><div class="eyebrow"><i class="dot"></i>ИТОГОВЫЙ ЭКЗАМЕН</div><h1>'+result.score+' из '+result.total+'</h1><p class="intro">'+(passed?'Стартовый модуль пройден. Ты не просто нажал карточки — ты прошёл проверку.':'Это нормальный первый результат. Экзамен показывает, что повторить, а не ставит плохую оценку.')+'</p></section><section class="exam"><h2>'+ (passed?'Можно двигаться дальше.':'Сначала закрепим слабое.')+'</h2><p>'+esc(weakText)+'</p><button class="btn primary" data-action="repeat-weak">'+(result.weak.length?'Повторить слабые темы':'Вернуться к курсу')+'</button><button class="btn" data-action="restart-exam">Пройти экзамен ещё раз</button></section>';
+    }else{
+      var q=examQuestions[state.examStep],answer=state.examAnswers[state.examStep],answered=typeof answer==='number',right=answered&&answer===q.a;
+      html+='<section class="course-head"><div class="eyebrow"><i class="dot"></i>ИТОГОВЫЙ ЭКЗАМЕН</div><h1>Проверь<br>старт.</h1><p class="intro">20 коротких вопросов: буквы, звуки, первые фразы. После каждого ответа будет объяснение.</p></section><section class="card"><div class="row"><span class="lesson-meta">ВОПРОС '+(state.examStep+1)+' ИЗ '+examQuestions.length+' · '+esc(q.area)+'</span><span class="chip">'+Math.round(state.examStep/examQuestions.length*100)+'%</span></div><h2>'+esc(q.q)+'</h2><div class="choices">';
+      q.o.forEach(function(option,index){html+='<button class="choice '+(answered?(index===q.a?'correct':index===answer?'wrong':''):'')+'" data-exam-option="'+index+'" '+(answered?'disabled':'')+'>'+esc(option)+'</button>'});
+      html+='</div><div class="state '+(answered?(right?'good':'bad'):'')+'">'+(answered?(right?'Верно. ':'Пока не так. ')+esc(q.x):'Выбери один вариант. Потом сразу увидишь объяснение.')+'</div><button class="btn primary" data-action="exam-next" '+(answered?'':'disabled')+'>'+ (state.examStep===examQuestions.length-1?'Показать результат':'Следующий вопрос →')+'</button></section>';
+    }
+    app.innerHTML=html;nav()
+  }
   function renderProgress(){
     var count=state.done.size,pct=progress(),next=nextIndex();
     var html=header()+'<div class="eyebrow"><i class="dot"></i>ТВОЙ РЕАЛЬНЫЙ РЕЗУЛЬТАТ</div><h1>Прогресс</h1><p class="intro">Засчитываем только завершённые уроки. Никаких нарисованных достижений.</p><div class="stats"><div class="stat"><span class="muted">Пройдено</span><b>'+count+' / '+lessons.length+'</b></div><div class="stat"><span class="muted">Следующий</span><b>'+(count===lessons.length?'Экзамен':'№'+(next+1))+'</b></div></div><section class="summary"><div class="row"><span class="muted">Бесплатный старт</span><b>'+pct+'%</b></div><div class="bar"><i style="width:'+pct+'%"></i></div><p class="small">Сначала закрепим 12 уроков. Затем появится итоговый экзамен из 20 заданий.</p></section>';
     if(count<lessons.length){html+='<section class="exam"><div class="eyebrow">ИТОГОВЫЙ ЭКЗАМЕН</div><h2>Пока рано.</h2><p>Осталось '+(lessons.length-count)+' уроков. Экзамен должен проверять знания, а не быть кнопкой для вида.</p><button class="btn primary" data-action="go-next">Продолжить урок '+(next+1)+'</button></section>'}
-    else{html+='<section class="exam"><div class="eyebrow">ИТОГОВЫЙ ЭКЗАМЕН</div><h2>Старт пройден.</h2><p>Экзамен из 20 заданий — следующий обязательный этап. Его добавляем вместе с разбором ошибок, а не пустой кнопкой.</p></section>'}
+    else{var examText=state.examResult?'Последний результат: '+state.examResult.score+' из '+state.examResult.total+'.':'20 вопросов: буквы, звуки, первые фразы и разбор ошибок.';html+='<section class="exam"><div class="eyebrow">ИТОГОВЫЙ ЭКЗАМЕН</div><h2>Старт пройден.</h2><p>'+esc(examText)+'</p><button class="btn primary" data-action="open-exam">'+(state.examResult?'Открыть результат':'Начать экзамен')+'</button></section>'}
     app.innerHTML=html;nav()
   }
   function renderProfile(){
     var last=localStorage.getItem('saygo-v2-last-day'),html=header()+'<div class="eyebrow"><i class="dot"></i>НАСТРОЙКИ ОБУЧЕНИЯ</div><h1>Профиль</h1><p class="intro">Данные хранятся на этом телефоне. Ничего не отправляем без твоего согласия.</p><section class="card"><div class="row"><span class="muted">Уровень сейчас</span><b>A0 · старт</b></div><hr><div class="row"><span class="muted">Пройдено уроков</span><b>'+state.done.size+'</b></div><hr><div class="row"><span class="muted">Дневная цель</span><b>5–10 минут</b></div><hr><div class="row"><span class="muted">Последнее занятие</span><b>'+(last||'ещё не начато')+'</b></div></section><section class="card"><div class="eyebrow">ДОСТУП</div><h2>12 уроков бесплатно</h2><p>Полный курс, NRV Club и оплата появятся только вместе с настоящей проверкой доступа. Пока мы не рисуем неработающие кнопки.</p></section>';
     app.innerHTML=html;nav()
   }
-  function render(){if(state.tab==='course')renderCourse();else if(state.tab==='progress')renderProgress();else if(state.tab==='profile')renderProfile();else renderToday()}
+  function render(){if(state.tab==='course')renderCourse();else if(state.tab==='progress')renderProgress();else if(state.tab==='profile')renderProfile();else if(state.tab==='exam')renderExam();else renderToday()}
   function clean(s){return String(s).toLowerCase().replace(/[’']/g,'').replace(/[^a-z ]/g,' ').replace(/\s+/g,' ').trim()}
   function doListen(){
     var l=lessons[state.current],box=$('#voiceState'),synth=window.speechSynthesis;
@@ -118,10 +161,15 @@
   document.addEventListener('click',function(e){
     var navBtn=e.target.closest('[data-nav]');if(navBtn){state.tab=navBtn.dataset.nav;render();window.scrollTo(0,0);return}
     var open=e.target.closest('[data-open]');if(open){state.current=Number(open.dataset.open);state.tab='today';state.quiz=false;state.built=false;state.words=[];state.soundAnswers={};state.spoken=false;state.listened=false;state.speechReport='';render();window.scrollTo(0,0);return}
+    var examOption=e.target.closest('[data-exam-option]');if(examOption){state.examAnswers[state.examStep]=Number(examOption.dataset.examOption);renderExam();return}
     var sound=e.target.closest('[data-sound]');if(sound){var parts=sound.dataset.sound.split('|'),itemIndex=Number(parts[0]),optionIndex=Number(parts[1]);state.soundAnswers[itemIndex]=optionIndex;state.built=false;renderToday();return}
     var word=e.target.closest('[data-word]');if(word){var all=(lessons[state.current].build||[]).slice().reverse(),w=all[Number(word.dataset.word)];state.words.push(w);render();return}
     var q=e.target.closest('[data-quiz]');if(q){var l=lessons[state.current],choice=Number(q.dataset.quiz),box=$('#quizState');document.querySelectorAll('[data-quiz]').forEach(function(b){b.classList.remove('correct','wrong')});if(choice===l.quiz.answer){q.classList.add('correct');state.quiz=true;box.className='state good';box.textContent='Верно. '+l.quiz.explain}else{q.classList.add('wrong');state.quiz=false;box.className='state bad';box.textContent='Пока не так. Верный ответ: '+l.quiz.options[l.quiz.answer]+'. '+l.quiz.explain}return}
     var action=e.target.closest('[data-action]');if(!action)return;
+    if(action.dataset.action==='open-exam'){if(!state.examResult){state.examStep=0;state.examAnswers=[]}state.tab='exam';render();window.scrollTo(0,0)}
+    if(action.dataset.action==='restart-exam'){state.examResult=null;state.examStep=0;state.examAnswers=[];state.tab='exam';render();window.scrollTo(0,0)}
+    if(action.dataset.action==='exam-next'){if(typeof state.examAnswers[state.examStep]!=='number'){toast('Сначала выбери ответ.');return}if(state.examStep<examQuestions.length-1){state.examStep++;renderExam();window.scrollTo(0,0)}else{finishExam();renderExam();window.scrollTo(0,0)}}
+    if(action.dataset.action==='repeat-weak'){if(state.examResult&&state.examResult.weak.length){state.current=state.examResult.weak[0];state.tab='today';state.quiz=false;state.built=false;state.words=[];state.soundAnswers={};state.spoken=false;state.listened=false;state.speechReport='';render();window.scrollTo(0,0)}else{state.tab='course';render();window.scrollTo(0,0)}}
     if(action.dataset.action==='listen')doListen();
     if(action.dataset.action==='clear-build'){state.words=[];state.built=false;renderToday()}
     if(action.dataset.action==='clear-sound'){state.soundAnswers={};state.built=false;renderToday()}
