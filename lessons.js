@@ -130,14 +130,147 @@ window.SAYGO_LESSONS = [
     outcome:'Ты умеешь вежливо попросить нужную вещь.'
   },
   {
-    module:'МОДУЛЬ 3 · ПЕРВАЯ ПРОВЕРКА', title:'Первый мини-экзамен', tag:'ПОВТОРЕНИЕ',
+    module:'МОДУЛЬ 3 · ЗАКРЕПЛЕНИЕ', title:'Закрепление: я и помощь', tag:'ЗАКРЕПЛЕНИЕ',
     english:'Hello. I’m Rustam. I need some help.', meaning:'Привет. Я Рустам. Мне нужна помощь.',
     pronounce:'хэлоу · айм Рустам · ай нид сам хелп',
     why:'Закрепляем не память карточек, а умение коротко представиться и попросить помощь.',
     rule:'Английская фраза чаще идёт так: кто? → что делает / что ему нужно. I → need → help.',
     tip:'Если запутался, вернись к урокам 4–9. Повторение — часть обучения, а не ошибка.',
     build:['Hello','I’m','Rustam','I','need','some','help'],practiceTitle:'Собери две короткие фразы',practiceHint:'Сначала: Hello, I’m Rustam. Затем: I need some help.',
-    quiz:{q:'Что изучалось раньше: буквы или первые фразы?',options:['сначала буквы и звуки, потом фразы','сначала сложная грамматика','сразу все времена'],answer:0,explain:'Сначала строим фундамент: буквы, звуки и чтение. Потом — короткие фразы.'},
+    quiz:{q:'Как правильно сказать: «Привет, я Рустам. Мне нужна помощь»?',options:['Hello. I’m Rustam. I need some help.','Hello. I Rustam need help some.','I’m help. Hello Rustam.'],answer:0,explain:'Сначала приветствие и имя, затем отдельная фраза о том, что тебе нужна помощь.'},
     outcome:'Ты прошёл старт: знаешь алфавит, ключевые звуки и можешь представиться или попросить помощь.'
+  }
+  ,
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Кто говорит: I, you, we, they', tag:'МЕСТОИМЕНИЯ',
+    english:'We are ready.', meaning:'Мы готовы.',
+    pronounce:'уи ар рэди',
+    why:'Чтобы сказать о себе, собеседнике или группе, сначала нужно назвать того, о ком говорим.',
+    rule:'I — я, you — ты/вы, we — мы, they — они. В английском местоимение обычно стоит первым.',
+    tip:'You может означать и «ты», и «вы». Смысл понятен из ситуации.',
+    build:['We','are','ready'],practiceTitle:'Собери фразу',practiceHint:'Сначала кто, затем состояние: we → are → ready.',
+    quiz:{q:'Как по-английски «мы»?',options:['we','they','you'],answer:0,explain:'We означает «мы».'},
+    outcome:'Ты умеешь назвать, кто говорит или о ком идёт речь.'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Связка am / are', tag:'ГРАММАТИКА',
+    english:'I am ready. You are welcome.', meaning:'Я готов. Пожалуйста / Добро пожаловать.',
+    pronounce:'ай эм рэди · ю ар уэлкам',
+    why:'В русском мы часто не говорим «есть», а в английском в таких фразах нужна связка am или are.',
+    rule:'После I ставим am. После you, we, they ставим are. Нельзя сказать I ready.',
+    tip:'В разговоре I am часто сокращают до I’m: I’m ready.',
+    build:['I','am','ready'],practiceTitle:'Собери фразу',practiceHint:'После I обязательно поставь am.',
+    quiz:{q:'Как правильно?',options:['I am ready.','I are ready.','I ready.'],answer:0,explain:'После I нужна связка am: I am ready.'},
+    outcome:'Ты понимаешь, зачем в английском нужны am и are.'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Связка is', tag:'ГРАММАТИКА',
+    english:'This is my phone.', meaning:'Это мой телефон.',
+    pronounce:'зис из май фоун',
+    why:'Так можно показать предмет, человека или место и сказать, что это такое.',
+    rule:'После he, she, it и this ставим is. This is — «это есть». В русской речи слово «есть» обычно не слышно, в английской конструкции оно нужно.',
+    tip:'This начинается со звонкого TH: язык слегка между зубами, голос включён.',
+    build:['This','is','my','phone'],practiceTitle:'Собери фразу',practiceHint:'Сначала покажи предмет: this, затем is.',
+    quiz:{q:'Что ставим после this?',options:['is','are','am'],answer:0,explain:'This — это один предмет, поэтому this is.'},
+    outcome:'Ты можешь показать предмет и сказать: «Это мой…».'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Порядок слов', tag:'ПРАВИЛО',
+    english:'I work here.', meaning:'Я работаю здесь.',
+    pronounce:'ай уорк хиэр',
+    why:'Русский позволяет менять слова местами. В английском порядок помогает сразу понять смысл.',
+    rule:'В простом утверждении: кто? → что делает? → остальное. I → work → here.',
+    tip:'Сначала найди «кто?», потом действие. Не переводь русское предложение перестановкой слов.',
+    build:['I','work','here'],practiceTitle:'Поставь слова по порядку',practiceHint:'Кто? → действие → где?',
+    quiz:{q:'Какой порядок верный?',options:['I work here.','Work I here.','Here I work?'],answer:0,explain:'В обычном утверждении сначала идёт тот, кто действует: I work here.'},
+    outcome:'Ты знаешь базовый порядок слов в простом утверждении.'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Отрицание: I do not…', tag:'ОТРИЦАНИЕ',
+    english:'I do not understand.', meaning:'Я не понимаю.',
+    pronounce:'ай ду нот андэрстэнд',
+    why:'Эта фраза спасает, когда человек говорит слишком быстро или ты не понял вопрос.',
+    rule:'Для простого действия с I / you / we / they отрицание строится через do not: I do not understand. В разговоре: I don’t understand.',
+    tip:'Не говори I not understand. Нужен помощник do.',
+    build:['I','do','not','understand'],practiceTitle:'Собери отрицание',practiceHint:'Кто? → do not → действие.',
+    quiz:{q:'Как правильно сказать «Я не понимаю»?',options:['I do not understand.','I not understand.','I am not understand.'],answer:0,explain:'С действием understand используем do not: I do not understand.'},
+    outcome:'Ты умеешь спокойно сказать, что не понял.'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Вопрос: Do you…?', tag:'ВОПРОС',
+    english:'Do you speak English?', meaning:'Вы говорите по-английски?',
+    pronounce:'ду ю спик инглиш',
+    why:'Так можно уточнить, сможет ли человек поговорить с тобой на английском.',
+    rule:'В вопросе с действием do выходит вперёд: Do → you → speak? Это не русская интонация, а порядок слов.',
+    tip:'В ответе можно сказать: Yes, I do. / No, I don’t.',
+    build:['Do','you','speak','English'],practiceTitle:'Собери вопрос',practiceHint:'Вопрос начинается с Do.',
+    quiz:{q:'С чего начинается этот вопрос?',options:['Do','You','Speak'],answer:0,explain:'Вопрос к действию начинается с Do: Do you speak English?'},
+    outcome:'Ты можешь задать простой вопрос с Do you…?'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Один предмет: a / an', tag:'АРТИКЛИ',
+    english:'I need a ticket.', meaning:'Мне нужен билет.',
+    pronounce:'ай нид э тикит',
+    why:'В английском перед одним предметом часто ставят короткое слово a или an.',
+    rule:'A означает «один / какой-то» перед согласным звуком: a ticket. An — перед гласным звуком: an apple.',
+    tip:'Не пытайся переводить a каждый раз. Сначала замечай его как часть английской фразы.',
+    build:['I','need','a','ticket'],practiceTitle:'Собери просьбу',practiceHint:'После need назови один предмет с a.',
+    quiz:{q:'Как правильно?',options:['a ticket','an ticket','ticket a'],answer:0,explain:'Ticket начинается с согласного звука, поэтому a ticket.'},
+    outcome:'Ты знаешь, зачем нужен a перед одним предметом.'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Этот и тот: this / that', tag:'УКАЗАНИЕ',
+    english:'This is a ticket. That is my bag.', meaning:'Это билет. То — моя сумка.',
+    pronounce:'зис из э тикит · зэт из май бэг',
+    why:'Эти слова помогают показать предмет рядом или чуть дальше.',
+    rule:'This — это рядом. That — то дальше. После обоих в простой фразе ставим is.',
+    tip:'В this и that есть TH: не заменяй его русским «з».',
+    build:['This','is','a','ticket'],practiceTitle:'Собери фразу',practiceHint:'Рядом с тобой: this → is → a ticket.',
+    quiz:{q:'Что выбираем для предмета рядом?',options:['this','that','they'],answer:0,explain:'This — «это» рядом. That — «то» дальше.'},
+    outcome:'Ты умеешь показать предмет: this или that.'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Когда предметов много', tag:'МНОЖЕСТВЕННОЕ ЧИСЛО',
+    english:'Two tickets, please.', meaning:'Два билета, пожалуйста.',
+    pronounce:'ту тикитс плиз',
+    why:'Числа и множественное число нужны в магазине, на вокзале и в кафе.',
+    rule:'После two и других чисел предмет обычно получает -s: two tickets. Один билет — one ticket.',
+    tip:'В tickets в конце слышится короткий звук «с»: ticket-s.',
+    build:['Two','tickets','please'],practiceTitle:'Собери просьбу',practiceHint:'Сначала число, затем предмет во множественном числе.',
+    quiz:{q:'Как правильно сказать «два билета»?',options:['two tickets','two ticket','tickets two'],answer:0,explain:'После two добавляем -s: two tickets.'},
+    outcome:'Ты можешь попросить несколько одинаковых предметов.'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Цена: How much is it?', tag:'МАГАЗИН',
+    english:'How much is it?', meaning:'Сколько это стоит?',
+    pronounce:'хау мач из ит',
+    why:'Это одна из самых полезных фраз в магазине, кафе и на рынке.',
+    rule:'How much — «сколько». Is it — «это стоит / это есть». Вопрос уже готовый: не переставляй слова.',
+    tip:'Сохрани фразу целиком, как номер телефона: How much is it?',
+    build:['How','much','is','it'],practiceTitle:'Собери вопрос о цене',practiceHint:'Начни с How much, затем is it.',
+    quiz:{q:'Что означает How much?',options:['сколько','где','который час'],answer:0,explain:'How much означает «сколько», чаще всего о цене или количестве.'},
+    outcome:'Ты можешь спросить цену.'
+  },
+  {
+    module:'МОДУЛЬ 4 · ОСНОВА ГРАММАТИКИ', title:'Время: What time is it?', tag:'ВРЕМЯ',
+    english:'What time is it?', meaning:'Который час?',
+    pronounce:'уот тайм из ит',
+    why:'Фраза нужна, когда ты ждёшь транспорт, встречу или хочешь понять расписание.',
+    rule:'What time — «который час». В английском вопросе связка is идёт перед it: What time is it?',
+    tip:'Time читается «тайм», буква i здесь даёт другой звук — это нормально: буква и звук не всегда совпадают.',
+    build:['What','time','is','it'],practiceTitle:'Собери вопрос о времени',practiceHint:'What time → is → it.',
+    quiz:{q:'Как спросить «Который час?»',options:['What time is it?','What is time it?','Time what is it?'],answer:0,explain:'Готовая английская конструкция: What time is it?'},
+    outcome:'Ты можешь спросить время и узнаёшь эту конструкцию на слух.'
+  },
+  {
+    module:'МОДУЛЬ 5 · ПЕРВАЯ РЕАЛЬНАЯ СИТУАЦИЯ', title:'Мини-диалог: билет и помощь', tag:'ПОВТОРЕНИЕ',
+    english:'Hello. I need two tickets, please.', meaning:'Здравствуйте. Мне нужно два билета, пожалуйста.',
+    pronounce:'хэлоу · ай нид ту тикитс плиз',
+    why:'Это короткая настоящая ситуация: поздороваться, назвать потребность и количество.',
+    rule:'Собираем известную схему: кто? → действие → число + предмет → please. Английский порядок не меняем.',
+    tip:'Не надо говорить идеально. Сначала передай смысл: I need two tickets, please.',
+    build:['Hello','I','need','two','tickets','please'],practiceTitle:'Собери реальную просьбу',practiceHint:'Приветствие → кто → действие → сколько и что → please.',
+    quiz:{q:'Как правильно попросить два билета?',options:['I need two tickets, please.','I two tickets need, please.','Need I tickets two.'],answer:0,explain:'В английском сначала I, затем need, потом two tickets.'},
+    outcome:'Ты применил правила в настоящей просьбе и готов к модулю «Город и поездка».'
   }
 ];
